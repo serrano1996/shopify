@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<meta charset="UTF-8">
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container" style="margin-top: 100px;">
+
+		<div class="text-center" th:if="${cart == null}">
+			<h3>No hay productos en el carrito aún.</h3>
+		</div>
+
+		<div th:unless="${cart == null}">
+			<h1 class="text-center">Carrito de compra</h1>
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Nombre</th>
+						<th scope="col">Precio</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="product : ${cart}">
+						<td class="text-center">
+							<img
+							th:src="${#strings.isEmpty(product.image)} ? 'http://placehold.it/350x260' : ${product.image}"
+							class="card-img-top" th:alt="${product.name}"
+							style="width: 100px; height: 100px;">
+						</td>
+						<td th:text="${product.name}"></td>
+						<td th:text="${#numbers.formatCurrency(product.price)}"></td>
+						<td>
+							<a th:href="@{/app/cart/delete/{id}(id=${product.id})}" class="btn btn-danger">
+								<i class="fas fa-trash"></i> Eliminar
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<span class="float-right font-weight-bold" th:text="'TOTAL: ' + ${#numbers.formatCurrency(total_cart)}"></span>
+			<div class="mt-5">
+				<a class="btn btn-primary" th:href="@{/public/}">Continuar comprando</a>
+				<a class="btn btn-success" th:href="@{/app/cart/buy}">Finalizar compra</a>
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>

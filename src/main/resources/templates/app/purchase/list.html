@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<meta charset="UTF-8">
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container" style="margin-top: 100px;">
+
+		<div class="text-center" th:if="${#lists.isEmpty(my_purchases)}">
+			<h3>No has efectuado ninguna compra aún.</h3>
+		</div>
+
+		<div th:unless="${#lists.isEmpty(my_purchases)}">
+			<h1>Compras efectuadas</h1>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td><strong>ID</strong></td>
+						<td><strong>Fecha</strong></td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="purchase : ${my_purchases}">
+						<td><span th:text="${'FAC #0000' + purchase.id}"></span>
+						<td><span th:text="${#dates.format(purchase.purchaseDate,'dd/MMM/yyyy HH:mm')}"></span></td>
+						<td><a th:href="@{/app/buy/bill/{id}(id=${purchase.id})}" class="btn btn-info">Ver factura</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="head">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Shopify</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" />
+</head>
+
+<body>
+
+	<header th:fragment="header">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" th:href="@{/}">Shopify</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+					<li class="nav-item active" sec:authorize="isAuthenticated()"><a class="nav-link"
+						th:href="@{/app/my_products}">Mis Productos</a></li>
+					<li class="nav-item active" sec:authorize="isAuthenticated()"><a class="nav-link"
+						th:href="@{/app/my-purchases}">Mis Compras</a></li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0 mr-2">
+					<input type="text" class="form-control" placeholder="Buscar..."
+						name="q" th:value="${param.q}">
+				</form>
+				<a th:href="@{/auth/login}" class="btn btn-primary" sec:authorize="!isAuthenticated()">Iniciar Sesión</a>
+				<form class="d-inline ml-3" th:action="@{/auth/logout}" method="post" id="logoutForm"></form>
+				<a href="#" onclick="document.getElementById('logoutForm').submit()" class="btn btn-danger" sec:authorize="isAuthenticated()">Salir</a>
+			</div>
+		</nav>
+	</header>
+
+	<footer th:fragment="footer" class="container">
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	</footer>
+
+</body>
+</html>

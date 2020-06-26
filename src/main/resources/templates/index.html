@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/layout :: head"></head>
+
+<meta charset="UTF-8">
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container-fluid" style="margin-top: 100px;">
+
+		<div class="row justify-content-center">
+			<div class="col-sm-12 col-md-2 col-lg-2 mb-2" sec:authorize="isAuthenticated()">
+				<div class="d-block" sec:authorize="isAuthenticated()">
+					<p th:text="${#authentication.name}"></p>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item"><a th:href="@{/app/cart}"><i
+						class="fas fa-shopping-cart"></i> Carrito</a> <span class="float-right badge badge-pill badge-primary" th:text="${cart == null} ? '0' : ${cart.size()}"></span></li>
+					<li class="list-group-item" th:if="${cart == null}">El carrito se encuentra vacío</li>
+					<li class="list-group-item" th:unless="${cart == null}" th:each="p : ${cart}">
+						<span class="text-muted" th:text="${p.name}">
+						</span><span class="float-right" th:text="${#numbers.formatCurrency(p.price)}"></span>
+					</li>
+					<li class="list-group-item" th:unless="${cart == null}">
+						<span class="font-weight-bold">TOTAL:</span>
+						<span class="float-right" th:text="${#numbers.formatCurrency(total_cart)}"></span>
+					</li>
+				</ul>
+			</div>
+			<div class="col-sm-12 col-md-8 col-lg-8">
+				<div class="row justify-content-center">
+					<div class="card ml-1 mb-1" style="width: 18rem;"
+						th:each="product : ${products}">
+						<a th:href="@{/public/product/{id}(id=${product.id})}">
+						<img
+							th:src="${#strings.isEmpty(product.image)} ? 'http://placehold.it/350x260' : ${product.image}"
+							class="card-img-top" th:alt="${product.name}"
+							style="height: 300px;">
+						</a>
+						<div class="card-body">
+							<h5 class="card-title" th:text="${product.name}"></h5>
+							<p class="card-text"
+								th:text="${#numbers.formatCurrency(product.price)}"></p>
+							<div class="text-right" sec:authorize="isAuthenticated()"
+								th:if="${#authentication.name != product.owner.email}">
+								<a th:href="@{/app/cart/add/{id}(id=${product.id})}" 
+									class="btn btn-success"><i
+									class="fas fa-cart-plus"></i> Añadir al carrito</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>
